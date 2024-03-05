@@ -6,6 +6,7 @@ Plongez dans l'univers Python avec ce projet éducatif inspiré d'AirBnB. Conçu
 <br>
 Bienvenue dans le projet Clone d'AirBnB ! Avant de commencer, familiarisez-vous avec le concept d'AirBnB en regardant cette présentation du projet HBNB.
 
+
 Première étape : Un interpréteur de commandes pour gérer vos objets AirBnB.
 C'est le premier jalon vers la création de votre application web complète : le clone d'AirBnB. Cette étape est cruciale car vous réutiliserez ce que vous créez ici dans les projets suivants, intégrant HTML/CSS, base de données, API, et l'intégration front-end.
 
