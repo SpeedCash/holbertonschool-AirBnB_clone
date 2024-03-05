@@ -167,5 +167,3 @@ python3 -m unittest discover tests
 ## 📜 Licence
 
 Ce projet est distribué sous la licence de l'École Holberton.
-
----
