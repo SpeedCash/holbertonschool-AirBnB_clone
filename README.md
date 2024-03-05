@@ -90,7 +90,7 @@ Clonage du dépôt :
 
 bash
 Copy code
-git clone https://github.com/RaphSchp/holbertonschool-AirBnB_clone.git
+git clone https://github.com/SpeedCash/holbertonschool-AirBnB_clone
 Démarrage de l'interpréteur :
 
 bash
@@ -118,7 +118,7 @@ Copy code
 python3 -m unittest discover tests
 ✍️ Auteurs
  Hocine BOUABDHALLA & thierry CRAVERO - Nous avons collaboré avec passion sur ce projet, explorant les profondeurs de Python et les subtilités du développement d'applications web. Retrouvez-nous sur GitHub !
- 
+
 📜 Licence
 Ce projet est distribué sous la licence de l'École Holberton.
 
