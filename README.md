@@ -91,6 +91,7 @@ Clonage du dépôt :
 bash
 Copy code
 git clone https://github.com/SpeedCash/holbertonschool-AirBnB_clone
+
 Démarrage de l'interpréteur :
 
 bash
