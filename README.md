@@ -162,7 +162,7 @@ python3 -m unittest discover tests
 
 ## ✍️ Auteurs
 
-- **Hocine BOUABDHALLA** & **Thierry CRAVERO** - Nous avons collaboré avec passion sur ce projet, explorant les profondeurs de Python et les subtilités du développement d'applications web. Retrouvez-nous sur GitHub !
+- **Hocine BOUABDALLAH** & **Thierry CRAVERO** - Nous avons collaboré avec passion sur ce projet, explorant les profondeurs de Python et les subtilités du développement d'applications web. Retrouvez-nous sur GitHub !
 
 ## 📜 Licence
 
