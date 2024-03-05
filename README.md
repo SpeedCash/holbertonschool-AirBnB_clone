@@ -2,9 +2,6 @@
     <h1>🏡 Clone d'AirBnB - La Console 🧑‍💻</h1>
 </div>
 
-<p align="center">
-    <img src="/assets/hbnb.png" alt="Logo de l'école Holberton">
-</p>
 
 <p align="center">
     <img src="https://zupimages.net/up/24/10/4zt2.png">
