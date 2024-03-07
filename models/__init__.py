@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+"""
+Module initialization file
+"""
+
 from models.engine.file_storage import FileStorage
 
 storage = FileStorage()
