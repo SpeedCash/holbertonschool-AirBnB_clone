@@ -22,13 +22,17 @@ class HBNBCommand(cmd.Cmd):
         """An empty line + ENTER shouldn’t execute anything."""
         pass
 
-    def do_create(self, arg):
-        """Creates a new instance of BaseModel and prints the id."""
-        if not arg:
+    def do_create(self, line):
+        args = line.split()
+        if not args:
             print("** class name missing **")
             return
+        class_name = args[0]
+        if class_name not in models.classes:
+            print("** class doesn't exist **")
+            return
         try:
-            new_instance = eval(arg)()
+            new_instance = models.classes[class_name]()
             new_instance.save()
             print(new_instance.id)
         except Exception:
