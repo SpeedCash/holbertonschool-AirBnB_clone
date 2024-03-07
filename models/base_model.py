@@ -30,7 +30,6 @@ class BaseModel:
         storage.new(self)
         storage.save()
 
-
     def to_dict(self):
         """Convert the object into a dictionary"""
         obj_dict = self.__dict__.copy()
