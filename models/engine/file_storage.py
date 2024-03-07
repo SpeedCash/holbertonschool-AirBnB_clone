@@ -1,15 +1,8 @@
-# models/engine/file_storage.py
-
 import json
 from models.base_model import BaseModel
-# Import other classes
-
 
 class FileStorage:
-    """Serializes instances to a JSON file & deserializes\
-        JSON file to instances."""
-
-    __file_path = 'file.json'
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
@@ -24,17 +17,18 @@ class FileStorage:
 
     def save(self):
         """Serializes '__objects' to the JSON file (path: '__file_path')"""
+        obj_dict = {obj_id: obj.to_dict() for obj_id, obj in self.__objects.items()}
         with open(self.__file_path, 'w') as f:
-            json.dump({k: v.to_dict() for k, v in self.__objects.items()}, f)
+            json.dump(obj_dict, f)
 
     def reload(self):
         """Deserializes the JSON file to '__objects'"""
         try:
             with open(self.__file_path, 'r') as f:
-                objects = json.load(f)
-            for obj_id, obj_dict in objects.items():
-                cls_name = obj_dict['__class__']
+                obj_dict = json.load(f)
+            for obj_id, obj_data in obj_dict.items():
+                cls_name = obj_data['__class__']
                 cls = eval(cls_name)
-                self.__objects[obj_id] = cls(**obj_dict)
+                self.__objects[obj_id] = cls(**obj_data)
         except FileNotFoundError:
             pass
