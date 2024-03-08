@@ -1,127 +1,190 @@
-#!/usr/bin/python3
-"""Module for HBNBCommand class."""
+#!/usr/bin/env python3
+"""
+Console that contains the entry point of the command interpreter.
+"""
+
 import cmd
-from models import storage
 from models.base_model import BaseModel
+import models
+import json
+from models.engine.file_storage import FileStorage
 from models.user import User
-from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
+from models.place import Place
 from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
-    """A command interpreter class."""
+    """
+    Create a class HBNBCommand for the interpreter command
+    Command interpreter:
+        Quit : exit the program
+        EOF : exit the program
+        Emptyline : do nothing
+        Create : instanciates, saves, and prints ID
+        Show : A string representation of class name and id
+        Destroy : Deletes an instance and save it in Json file
+        All : Prints all string representation of all instances
+        Update : Update instance from class name and id, or updating attributes
+    """
+
     prompt = '(hbnb) '
 
-    def __init__(self):
-        super().__init__()
-        self.classes = {
-            "BaseModel": BaseModel,
-            "User": User,
-            "Place": Place,
-            "State": State,
-            "City": City,
-            "Amenity": Amenity,
-            "Review": Review
-        }
-
     def do_quit(self, arg):
-        """Quit command to exit the program."""
-        return True
+        """Command quit to exit the program."""
+        raise SystemExit
 
     def do_EOF(self, arg):
-        """EOF command to exit the program."""
+        """Command EOF to exit the program."""
         print()
-        return True
+        raise SystemExit
 
     def emptyline(self):
-        """An empty line + ENTER shouldn’t execute anything."""
+        """Pass and do nothing with an empty line"""
         pass
 
-    def do_create(self, line):
-        args = line.split()
-        if not args:
+    def do_create(self, arg):
+        """Create an instanciate, save it, and print ID"""
+        if not arg:
             print("** class name missing **")
             return
-        class_name = args[0]
-        if class_name not in self.classes:
+
+        class_name = arg.split()[0]
+        if class_name not in globals():
             print("** class doesn't exist **")
             return
-        new_instance = self.classes[class_name]()
+
+        new_instance = globals()[class_name]()
         new_instance.save()
         print(new_instance.id)
 
     def do_show(self, arg):
-        """Prints the string representation of an instance."""
+        """A string representation of class name and id"""
+        print(arg)
         args = arg.split()
-        if len(args) < 2:
-            print("** class name missing **" if not args else "** \
-                  instance id missing **")
+        print(args)
+        if not args:
+            print("** class name missing **")
             return
-        class_name, instance_id = args[0], args[1]
-        if class_name not in self.classes:
+
+        class_name = args[0]
+        if class_name not in globals():
             print("** class doesn't exist **")
             return
-        all_objs = storage.all(self.classes[class_name])
-        obj_key = "{}.{}".format(class_name, instance_id)
-        if obj_key in all_objs:
-            print(all_objs[obj_key])
-        else:
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        instance_id = args[1]
+        key = "{}.{}".format(class_name, instance_id)
+        if key not in models.storage.all():
             print("** no instance found **")
+            return
+        print(models.storage.all()[key])
 
     def do_destroy(self, arg):
-        """Deletes an instance based on the class name and id."""
+        """Deletes an instance and save it in Json file"""
         args = arg.split()
-        if len(args) < 2:
-            print("** class name missing **" if not args else "** \
-                  instance id missing **")
+        if not args:
+            print("** class name missing **")
             return
-        class_name, instance_id = args[0], args[1]
-        if class_name not in self.classes:
+
+        class_name = args[0]
+        if class_name not in globals():
             print("** class doesn't exist **")
             return
-        all_objs = storage.all(self.classes[class_name])
-        obj_key = "{}.{}".format(class_name, instance_id)
-        if obj_key in all_objs:
-            del all_objs[obj_key]
-            storage.save()
-        else:
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        instance_id = args[1]
+        key = "{}.{}".format(class_name, instance_id)
+        if key not in models.storage.all():
             print("** no instance found **")
+            return
+
+        del models.storage.all()[key]
+        models.storage.save()
 
     def do_all(self, arg):
-        """Prints all string representation of instances."""
-        args = arg.split()
-        if args and args[0] not in self.classes:
+        """Prints all string representation of all instances"""
+        if not arg:
+            for instance in models.storage.all().values():
+                print(instance)
+            return
+
+        class_name = arg.split()[0]
+        if class_name not in globals():
             print("** class doesn't exist **")
             return
-        objs = storage.all(self.classes.get(args[0], None))
-        print([str(obj) for obj in objs.values()])
+
+        all_instances = []
+        for key, instance in models.storage.all().items():
+            if key.split('.')[0] == class_name:
+                all_instances.append(str(instance))
+
+        if not all_instances:
+            print("** no instances found **")
+        else:
+            print('\n'.join(all_instances))
 
     def do_update(self, arg):
-        """Updates an instance based on the class name and\
-            id by adding or updating attribute."""
+        """Update instance from class name and id, or updating attributes"""
         args = arg.split()
-        if len(args) < 4:
-            print("** class name missing **" if not args else
-                  "** instance id missing **" if len(args) == 1 else
-                  "** attribute name missing **" if len(args) == 2 else
-                  "** value missing **")
+        if not args:
+            print("** class name missing **")
             return
-        class_name, instance_id, attribute_name, attribute_value = \
-            args[0], args[1], args[2], args[3].strip('"')
-        if class_name not in self.classes:
+
+        class_name = args[0]
+        if class_name not in globals():
             print("** class doesn't exist **")
             return
-        all_objs = storage.all(self.classes[class_name])
-        obj_key = "{}.{}".format(class_name, instance_id)
-        if obj_key in all_objs:
-            setattr(all_objs[obj_key], attribute_name, attribute_value)
-            all_objs[obj_key].save()
-        else:
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        instance_id = args[1]
+        key = "{}.{}".format(class_name, instance_id)
+        if key not in models.storage.all():
             print("** no instance found **")
+            return
+
+        instance = models.storage.all()[key]
+
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return
+
+        attribute_name = args[2]
+        if len(args) < 4:
+            print("** value missing **")
+            return
+
+        attribute_value_str = args[3]
+
+        if not (attribute_value_str.isdigit() or '.' in attribute_value_str):
+            try:
+                attribute_value = float(attribute_value_str)
+            except ValueError:
+                attribute_value = attribute_value_str
+
+        else:
+            attribute_value = type(getattr(instance, attribute_name))
+            (attribute_value_str)
+
+        if attribute_name in ["id", "created_at", "updated_at"]:
+            print("** cannot update id, created_at, or updated_at **")
+            return
+
+        setattr(instance, attribute_name, attribute_value)
+        instance.save()
 
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
+    
