@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Module for handling file storage"""
 
+from models.base_model import BaseModel
 import json
 
 
@@ -35,7 +36,10 @@ class FileStorage:
                 obj_dict = json.load(f)
             for key, obj_data in obj_dict.items():
                 class_name, obj_id = key.split('.')
-                cls = eval(class_name)
+                cls = None
+                bases = (BaseModel,)
+                namespace = obj_data
+                cls = type(class_name, bases, namespace)
                 self.__objects[key] = cls(**obj_data)
         except FileNotFoundError:
             pass
