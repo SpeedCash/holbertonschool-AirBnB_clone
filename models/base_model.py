@@ -1,8 +1,6 @@
-#!/usr/bin/python3
-"""Module containing the BaseModel class"""
-
 from datetime import datetime
 from uuid import uuid4
+import models
 
 
 class BaseModel:
@@ -17,17 +15,16 @@ class BaseModel:
                         value = datetime.strptime(
                             value, "%Y-%m-%dT%H:%M:%S.%f")
                     setattr(self, key, value)
-
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            models.storage.new(self)
 
     def save(self):
         """Update the update date (updated_at)"""
         self.updated_at = datetime.now()
-        from models.engine.file_storage import FileStorage
-        FileStorage().save()
+        models.storage.save()
 
     def to_dict(self):
         """Convert the object into a dictionary"""
