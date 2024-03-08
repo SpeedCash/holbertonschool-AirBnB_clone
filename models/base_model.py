@@ -3,7 +3,6 @@
 
 from datetime import datetime
 from uuid import uuid4
-from models import storage
 
 
 class BaseModel:
@@ -27,8 +26,8 @@ class BaseModel:
     def save(self):
         """Update the update date (updated_at)"""
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        from models.engine.file_storage import FileStorage
+        FileStorage().save()
 
     def to_dict(self):
         """Convert the object into a dictionary"""
