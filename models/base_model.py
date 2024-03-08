@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+"""Module containing the BaseModel class"""
+
 from datetime import datetime
 from uuid import uuid4
 import models
